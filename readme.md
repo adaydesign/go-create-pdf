@@ -6,9 +6,20 @@
 
 link : github.com/phpdave11/gofpdf
 
+- [Fix bug] file size increase - 4/8/2021
+
 ### Run
 ```
 $ go run main.go
+```
+
+### Test by API
+
+- server run on port :3030
+- test url : (can run REST-Client in test.http)
+
+```
+GET http://localhost:3030/1
 ```
 
 ### Information

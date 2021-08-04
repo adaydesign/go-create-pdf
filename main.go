@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"go-pdf-1/model"
+	"log"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
@@ -33,9 +36,6 @@ func main() {
 		ScanDocuments:         []int{1, 2, 3},
 	}
 
-	officer1.GeneratePDFDocument()
-	fmt.Println("generate finished -- officer1")
-
 	officer2 := &model.FormRequest{
 		ID:                    2,
 		FormLocal:             "สำนักเทคโนโลยีสารสนเทศ",
@@ -64,7 +64,24 @@ func main() {
 		ScanDocumentOtherName: "เอกสารความลับ",
 	}
 
-	officer2.GeneratePDFDocument()
-	fmt.Println("generate finished -- officer2")
+	// run normal
+	officer1.GeneratePDFDocument()
+	fmt.Print("generate finished -- officer1 (normal)")
 
+	// run server
+	app := fiber.New()
+	app.Get("/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		if id == "1" {
+			officer1.GeneratePDFDocument()
+			return c.SendString("generate finished -- officer1")
+		} else if id == "2" {
+			officer2.GeneratePDFDocument()
+			return c.SendString("generate finished -- officer2")
+		} else {
+			return c.SendString("Hello, World!")
+		}
+	})
+
+	log.Fatal(app.Listen(":3030"))
 }

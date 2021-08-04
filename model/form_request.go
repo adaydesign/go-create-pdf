@@ -55,11 +55,12 @@ func (frm FormRequest) GeneratePDFDocument() error {
 
 	// Import example-pdf.pdf with gofpdi free pdf document importer
 	// fix local of form1.pdf -- tempate
-	tpl1 := gofpdi.ImportPage(pdf, "./pdf-template/form1.pdf", 1, "/MediaBox")
+	gofpdiX := gofpdi.NewImporter() // [Fix] new importer object
+	tpl1 := gofpdiX.ImportPage(pdf, "./pdf-template/form1.pdf", 1, "/MediaBox")
 
 	// page 1
 	pdf.AddPage()
-	gofpdi.UseImportedTemplate(pdf, tpl1, 0, 0, 210, 0)
+	gofpdiX.UseImportedTemplate(pdf, tpl1, 0, 0, 210, 0)
 
 	// เขียนที่
 	pdf.Text(128, 29, frm.FormLocal)
@@ -154,8 +155,8 @@ func (frm FormRequest) GeneratePDFDocument() error {
 
 	//page 2
 	pdf.AddPage()
-	tpl2 := gofpdi.ImportPage(pdf, "./pdf-template/form1.pdf", 2, "/MediaBox")
-	gofpdi.UseImportedTemplate(pdf, tpl2, 0, 0, 210, 0)
+	tpl2 := gofpdiX.ImportPage(pdf, "./pdf-template/form1.pdf", 2, "/MediaBox")
+	gofpdiX.UseImportedTemplate(pdf, tpl2, 0, 0, 210, 0)
 
 	// ข้าพเจ้า
 	pdf.Text(64, 45, frm.HeadFullName)
